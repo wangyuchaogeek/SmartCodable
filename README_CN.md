@@ -93,19 +93,9 @@ let model = BasicTypes.deserialize(from: json)
 
 ### Swift Package Manager
 
-> 🚧 **7.0 当前处于 beta 阶段。** 最新 beta 版本为 `7.0.0-beta.1`，请使用 `exact:` 引入 —— `from:` 不会匹配 prerelease 版本。
-
 ```swift
 dependencies: [
-    .package(url: "https://github.com/iAmMccc/SmartCodable.git", exact: "7.0.0-beta.1")
-]
-```
-
-7.0 正式版发布后，可改为：
-
-```swift
-dependencies: [
-    .package(url: "https://github.com/iAmMccc/SmartCodable.git", from: "7.0.0")
+    .package(url: "https://github.com/iAmMccc/SmartCodable.git", branch: "main")
 ]
 ```
 
@@ -301,11 +291,11 @@ struct Model: Decodable {
 
 类继承能力已迁移到独立的配套库 —— [SmartCodableMacro](https://github.com/iAmMccc/SmartCodableMacro)。它依赖 `swift-syntax`，所以单独发布以保持核心库轻量、零依赖。
 
-需要使用 `@SmartSubclass` 时，请额外引入（当前为 beta）：
+需要使用 `@SmartSubclass` 时，请额外引入：
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/iAmMccc/SmartCodableMacro.git", exact: "1.0.0-beta.1")
+    .package(url: "https://github.com/iAmMccc/SmartCodableMacro.git", branch: "main")
 ]
 ```
 

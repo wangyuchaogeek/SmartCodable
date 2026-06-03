@@ -94,19 +94,9 @@ let model = BasicTypes.deserialize(from: json)
 
 ### Swift Package Manager
 
-> 🚧 **7.0 is currently in beta.** The latest beta is `7.0.0-beta.1`. Use `exact:` for now — `from:` does not match prerelease versions.
-
 ```swift
 dependencies: [
-    .package(url: "https://github.com/iAmMccc/SmartCodable.git", exact: "7.0.0-beta.1")
-]
-```
-
-Once 7.0 is stable, switch to:
-
-```swift
-dependencies: [
-    .package(url: "https://github.com/iAmMccc/SmartCodable.git", from: "7.0.0")
+    .package(url: "https://github.com/iAmMccc/SmartCodable.git", branch: "main")
 ]
 ```
 
@@ -302,11 +292,11 @@ struct Model: Decodable {
 
 Class inheritance support has been moved to a separate package — [SmartCodableMacro](https://github.com/iAmMccc/SmartCodableMacro). It depends on `swift-syntax`, so we ship it independently to keep this core library lightweight and dependency-free.
 
-Add it alongside SmartCodable when you need `@SmartSubclass` (currently in beta):
+Add it alongside SmartCodable when you need `@SmartSubclass`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/iAmMccc/SmartCodableMacro.git", exact: "1.0.0-beta.1")
+    .package(url: "https://github.com/iAmMccc/SmartCodableMacro.git", branch: "main")
 ]
 ```
 
