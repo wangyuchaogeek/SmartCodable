@@ -31,7 +31,7 @@ public struct SmartIgnored<T>: PropertyWrapperable {
     public func wrappedValueDidFinishMapping() -> SmartIgnored<T>? {
         if var temp = wrappedValue as? SmartDecodable {
             temp.didFinishMapping()
-            return SmartIgnored(wrappedValue: temp as! T)
+            return SmartIgnored(wrappedValue: temp as! T, isEncodable: isEncodable)
         }
         return nil
     }
@@ -75,8 +75,14 @@ extension SmartIgnored: Codable {
             )
         }
         
-        /// The resolution triggered by the other three parties may be resolved here.
-        wrappedValue = try impl.smartDecode(type: T.self)
+        // 第三方解码路径（无 parsingMark）下，经当前属性边从宿主上下文恢复完整的包装器声明，
+        // 确保包装器自身的配置状态（如 isEncodable）及 wrappedValue 完整保留。
+        // 根级 wrapper 没有宿主声明可读时，沿用 Patcher 兜底。
+        if let declared: Self = impl.propertyContext?.declaredWrapper(as: Self.self) {
+            self = declared
+        } else {
+            wrappedValue = try Patcher<T>.defaultForType()
+        }
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -90,12 +96,5 @@ extension SmartIgnored: Codable {
             var container = encoder.singleValueContainer()
             try container.encodeNil()
         }
-    }
-}
-
-
-extension JSONDecoderImpl {
-    fileprivate func smartDecode<T>(type: T.Type) throws -> T {
-        try cache.initialValue(forKey: codingPath.last, codingPath: codingPath)
     }
 }

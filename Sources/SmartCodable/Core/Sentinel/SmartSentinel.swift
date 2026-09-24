@@ -74,7 +74,8 @@ extension SmartSentinel {
         let typeString = String(describing: T.self)
         guard !typeString.starts(with: "SmartIgnored<") else { return }
         
-        let className = impl.cache.findSnapShot(with: impl.codingPath)?.objectTypeName ?? ""
+        // 字段日志使用该容器固定所属的模型类型，不查询任何活动状态
+        let className = impl.modelSnapshot.map { String(describing: $0.objectType) } ?? ""
         var path = impl.codingPath
         path.append(key)
         

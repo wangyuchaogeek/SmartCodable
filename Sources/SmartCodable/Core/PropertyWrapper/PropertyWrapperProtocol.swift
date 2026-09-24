@@ -54,6 +54,21 @@ public extension PropertyWrapperable {
     }
 }
 
+public extension PropertyWrapperable where WrappedValue: Decodable {
+    /// 解码属性包装器的内层值；在 SmartCodable 中会派生一个绑定到内层模型的新解码视图。
+    ///
+    /// 同时遵循 `PropertyWrapperable` 与 `SmartDecodable` 的双协议包装器应使用此方法，
+    /// 替代直接调用 `WrappedValue(from: decoder)`，以保证正确应用内层模型的默认值与键值映射。
+    /// 直接调用 `WrappedValue(from: decoder)` 无法被框架观察，内层模型将继续使用
+    /// 包装器自己的解码视图，表现为 wrapper-first 语义。
+    static func decodeWrappedValue(from decoder: Decoder) throws -> WrappedValue {
+        if let decoder = decoder as? JSONDecoderImpl {
+            return try decoder.unwrap(as: WrappedValue.self)
+        }
+        return try WrappedValue(from: decoder)
+    }
+}
+
 protocol _OptionalType {
     static var wrappedType: Any.Type { get }
 }
